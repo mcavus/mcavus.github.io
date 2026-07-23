@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Mark Cavusoglu</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <meta name="description" content="How this site is built: type, hosting, icons and artwork." />
+    <link rel="canonical" href="https://mcavus.com/site.html" />
+
+    <!-- link previews: Slack, LinkedIn, iMessage, WhatsApp -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Mark Cavusoglu" />
+    <meta property="og:title" content="Site info" />
+    <meta property="og:description" content="How this site is built: type, hosting, icons and artwork." />
+    <meta property="og:url" content="https://mcavus.com/site.html" />
+    <meta property="og:image" content="https://mcavus.com/share.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Mark Cavusoglu, founder, software engineer and designer." />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <meta name="theme-color" content="#fdfcf8" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#151414" media="(prefers-color-scheme: dark)" />
+
+    <!-- Apply the stored theme before first paint so the toggle never flashes. -->
+    <script>
+      try {
+        var t = localStorage.getItem("theme");
+        if (t === "light" || t === "dark") document.documentElement.dataset.theme = t;
+      } catch (e) {}
+    </script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500&family=Courier+Prime&family=Inter:wght@400;500&family=Spectral:ital@0;1&display=swap"
+      rel="stylesheet"
+    />
+
+    <link rel="icon" href="favicon.ico" sizes="any" />
+    <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="apple-touch-icon.png" />
+    <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png" />
+
+    <link rel="stylesheet" href="style.css" />
+  </head>
+
+  <body>
+    <main class="page">
+      <div class="page-inner">
+        <div class="hero-col">
+          <nav class="page-nav">
+            <a class="home-link" href="index.html">
+              <svg class="home-arrow" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true" focusable="false">
+                <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8"/>
+              </svg>
+              <span>Back to home</span>
+            </a>
+          </nav>
+
+          <header class="hero-header">
+            <h1 class="page-title">Site info</h1>
+          </header>
+
+          <dl class="colophon">
+            <dt>Built</dt>
+            <dd>HTML, CSS, JavaScript</dd>
+
+            <dt>Hosting</dt>
+            <dd>GitHub Pages, $0 a month</dd>
+
+            <dt>Type</dt>
+            <dd>
+              Spectral, Inter, Courier Prime, and Cormorant Garamond, via
+              <a href="https://fonts.google.com" target="_blank" rel="noreferrer">Google Fonts</a>
+            </dd>
+
+            <dt>Icons</dt>
+            <dd>
+              <a href="https://icons.getbootstrap.com" target="_blank" rel="noreferrer">Bootstrap Icons</a>
+            </dd>
+
+            <dt>Artwork</dt>
+            <dd>
+              William Turner of Oxford, 1824, on the 404 page. Public domain,
+              from the
+              <a href="https://collections.britishart.yale.edu/catalog/tms:47364" target="_blank" rel="noreferrer">Yale Center for British Art</a>
+            </dd>
+
+            <dt>Analytics</dt>
+            <dd>
+              <a href="https://www.cloudflare.com/web-analytics/" target="_blank" rel="noreferrer">Cloudflare Web Analytics</a>,
+              no cookies
+            </dd>
+          </dl>
+
+          <footer class="hero-footer">
+              <div class="footer-row">
+                <a class="icon-btn" href="site.html" data-label="Site info" aria-label="Site info">
+                  <svg viewBox="0 0 16 16" width="16" height="16" fill="currentColor" aria-hidden="true" focusable="false">
+                  <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
+                  <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0"/>
+                </svg>
+                </a>
+                <!-- literal year is the no-JS fallback; theme.js keeps it current -->
+                <span class="footer-years">&copy;&nbsp;2015&ndash;<span id="year">2026</span></span>
+                <button class="icon-btn" id="theme" type="button" data-label="Switch theme" aria-label="Switch colour theme">
+                  <svg viewBox="0 0 20 20" width="16" height="16" aria-hidden="true" focusable="false">
+                  <circle cx="10" cy="10" r="7.4" fill="none" stroke="currentColor" stroke-width="1.3" />
+                  <path d="M10 2.6a7.4 7.4 0 0 0 0 14.8z" fill="currentColor" />
+                </svg>
+                </button>
+              </div>
+              <p class="footer-monogram">MC</p>
+            </footer>
+        </div>
+      </div>
+    </main>
+
+    <script src="theme.js" defer></script>
+    <script src="analytics.js" defer></script>
+  </body>
+</html>

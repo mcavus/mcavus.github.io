@@ -1,0 +1,796 @@
+/* Palette: sage #7FBBB0 · ink #151414 · clay #908374 · paper #E1E0DE (dark-mode text)
+   The four are used at full strength in dark mode. On paper, sage and clay
+   are too light to pass WCAG AA on cream, so light mode uses hue-matched
+   darker variants (#447F74 / #7F7365) that clear 4.5:1.
+   Light mode sits on a near-white cream (#FDFCF8); dark stays on ink (#151414). */
+
+:root {
+  color-scheme: light;
+  --accent: #447f74; /* sage, darkened for cream — 4.51:1 */
+  --label: #7f7365; /* clay, darkened for cream — 4.50:1 */
+  --page-bg: #fdfcf8; /* near-white cream, just off neutral */
+  --text-main: #151414; /* 17.91:1 */
+  --text-soft: #7f7365; /* 4.50:1 */
+  --meta: #747473; /* neutral grey for metadata — 4.56:1, deliberately not clay */
+  --border-soft: rgba(144, 131, 116, 0.5);
+  --rule-fade: rgba(144, 131, 116, 0.14);
+  --link-line: rgba(64, 121, 111, 0.35);
+  --surface: #f0ede4; /* one step darker than the page */
+  /* blind deboss: shadow on the upper edge, highlight on the lower */
+  /* A dark edge on near-white reads weaker than a bright edge on near-black,
+     so light mode sits a little above the numbers to read as equal to dark. */
+  --emboss-lo: rgba(113, 101, 81, 0.62);
+  --emboss-hi: rgba(255, 255, 255, 1);
+  --emboss-face: #f9f8f4;
+}
+
+/* dark tokens, kept in one place */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --accent: #7fbbb0; /* 8.44:1 on ink */
+    --label: #908374; /* 4.98:1 on ink */
+    --page-bg: #151414;
+    --text-main: #e1e0de; /* 13.94:1 */
+    --text-soft: #908374; /* 4.98:1 */
+    --meta: #9e9e9d; /* 6.86:1 */
+    --border-soft: rgba(144, 131, 116, 0.32);
+    --rule-fade: rgba(144, 131, 116, 0.08);
+    --link-line: rgba(127, 187, 176, 0.35);
+    --surface: #232322; /* one step lighter than the page */
+    --emboss-lo: rgba(0, 0, 0, 0.98);
+    --emboss-hi: rgba(255, 255, 255, 0.22);
+    --emboss-face: #181717; /* barely off the page, so the form still catches */
+  }
+}
+
+/* explicit choice from the toggle always wins over the system preference */
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --accent: #7fbbb0;
+  --label: #908374;
+  --page-bg: #151414;
+  --text-main: #e1e0de;
+  --text-soft: #908374;
+  --meta: #9e9e9d;
+  --border-soft: rgba(144, 131, 116, 0.32);
+  --rule-fade: rgba(144, 131, 116, 0.08);
+  --link-line: rgba(127, 187, 176, 0.35);
+  --surface: #232322; /* one step lighter than the page */
+  --emboss-lo: rgba(0, 0, 0, 0.98);
+  --emboss-hi: rgba(255, 255, 255, 0.22);
+  --emboss-face: #181717; /* barely off the page, so the form still catches */
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* Everything below is sized in rem, so this one value scales the whole page.
+   112.5% = 18px base instead of the browser default 16px. */
+html {
+  font-size: 112.5%;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: "Spectral", Georgia, "Times New Roman", serif;
+  background-color: var(--page-bg);
+  color: var(--text-main);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* everything that is not prose keeps its original face */
+.hero-name,
+.hero-location,
+.footer-years {
+  font-family: "Inter", system-ui, sans-serif;
+}
+
+.page {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start; /* allow margin-top to work naturally */
+}
+
+.page-inner {
+  /* .page is a centring flex container, so this needs an explicit width or it
+     shrinks to fit its content and max-width never applies */
+  width: 100%;
+  max-width: 47.5rem; /* 760px at the old 16px base */
+  padding: 3rem 1.5rem;
+  margin: 0 auto;
+}
+
+@media (min-width: 992px) {
+  .page-inner {
+    padding: 4.5rem 2rem;
+  }
+}
+
+/* Replaces Bootstrap's .row / .col-12 .col-lg-8. That grid resolved to a
+   456px column centred inside the 760px page on wide screens, and to full
+   width below the 992px breakpoint — reproduced here exactly. */
+.hero-col {
+  width: 100%;
+}
+
+@media (min-width: 992px) {
+  .hero-col {
+    max-width: 28.5rem; /* 456px at the old 16px base */
+    margin-inline: auto;
+  }
+}
+
+.hero-header {
+  margin-bottom: 2.25rem;
+  margin-top: clamp(3rem, 8vh, 6rem); /* real hero spacing */
+}
+
+/* the two footer icon buttons — about, and the theme toggle */
+
+.icon-btn {
+  position: relative;
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 2rem;
+  height: 2rem;
+  padding: 0;
+  border: 0;
+  border-radius: 4px;
+  background: transparent;
+  color: var(--meta);
+  text-decoration: none;
+  cursor: pointer;
+  transition: color 160ms ease, background-color 160ms ease;
+}
+
+.icon-btn:hover {
+  color: var(--accent);
+  background: var(--surface);
+}
+
+.icon-btn:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* Own tooltip rather than the native title=, which waits about a second and
+   arrives in OS chrome. This shows instantly and in the site's own type. */
+.icon-btn::after {
+  content: attr(data-label);
+  position: absolute;
+  bottom: calc(100% + 0.35rem);
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  font-family: "Inter", system-ui, sans-serif;
+  font-size: 0.78rem; /* 14px */
+  font-weight: 400;
+  letter-spacing: normal;
+  line-height: 1.3;
+  color: var(--text-main);
+  color: color-mix(in srgb, var(--text-main) 78%, transparent);
+  background: var(--surface);
+  border-radius: 0.34rem; /* 6px */
+  padding: 0.22rem 0.56rem; /* 4px 10px */
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 140ms ease;
+}
+
+.icon-btn:hover::after,
+.icon-btn:focus-visible::after {
+  opacity: 1;
+}
+
+/* The buttons are 2rem boxes around a 16px glyph, so the glyph sits 10px
+   inside the button's edge. Aligning the boxes to the column would leave the
+   icons visibly indented against the contact icons and headings above, so the
+   outer two are pulled out by that inset — the glyphs line up with the column,
+   and only the hover background overhangs it. */
+.footer-row .icon-btn:first-child {
+  margin-left: calc((2rem - 16px) / -2);
+}
+
+.footer-row .icon-btn:last-child {
+  margin-right: calc((2rem - 16px) / -2);
+}
+
+/* the outer two would otherwise centre their labels off the edge of a phone */
+.footer-row .icon-btn:first-child::after {
+  left: 0;
+  transform: none;
+}
+
+.footer-row .icon-btn:last-child::after {
+  left: auto;
+  right: 0;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .icon-btn,
+  .icon-btn::after {
+    transition: none;
+  }
+}
+
+/* identity block: photo + name */
+
+.identity {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  margin-bottom: 1.4rem;
+}
+
+.avatar {
+  flex: none;
+  display: block;
+  width: 3.25rem;
+  height: 3.25rem;
+  border-radius: 50%;
+  overflow: hidden;
+  /* hairline ring keeps the circle from dissolving into the page in both themes */
+  box-shadow: 0 0 0 1px var(--border-soft);
+}
+
+.avatar img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+  /* deter casual saving: no drag, no selection, no long-press callout, and
+     pointer-events:none sends right-clicks to the wrapper instead, so the
+     browser offers no image-specific menu items */
+  pointer-events: none;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-user-drag: none;
+  -webkit-touch-callout: none;
+}
+
+/* name */
+
+.hero-name {
+  letter-spacing: 0.14em;
+  font-size: 1.05rem;
+  font-weight: 500;
+  line-height: 1.2;
+  color: var(--accent);
+  text-transform: uppercase;
+  margin: 0;
+}
+
+.hero-location {
+  font-size: 0.78rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--meta);
+  /* bottom spacing now belongs to .identity */
+  margin: 0.35rem 0 0;
+}
+
+/* back-link above the title on secondary pages */
+.page-nav {
+  margin-top: 0.5rem;
+}
+
+.page-nav .home-link {
+  margin-top: 0;
+}
+
+/* the hero's tall top margin belongs to the link now */
+.page-nav + .hero-header {
+  margin-top: 2rem;
+}
+
+/* colophon: label / value rows. Deliberately not .info-section — that
+   pattern, with its rules and tracked headings, belongs to the homepage. */
+.colophon {
+  margin: 0;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.25rem 1.5rem;
+  font-size: 0.96rem;
+  line-height: 1.6;
+}
+
+@media (min-width: 34em) {
+  .colophon {
+    grid-template-columns: 6.5rem 1fr;
+    gap: 0.7rem 1.5rem;
+  }
+}
+
+.colophon dt {
+  font-family: "Inter", system-ui, sans-serif;
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--meta);
+  /* nudge down so the label sits on the value's baseline, not above it */
+  padding-top: 0.28rem;
+}
+
+.colophon dd {
+  margin: 0 0 1rem;
+  color: var(--text-main);
+}
+
+@media (min-width: 34em) {
+  .colophon dd {
+    margin-bottom: 0;
+  }
+}
+
+.colophon a {
+  font-family: "Courier Prime", ui-monospace, "Courier New", monospace;
+  color: var(--accent);
+  text-decoration: none;
+  border-bottom: 1px solid var(--link-line);
+  transition: border-bottom-color 160ms ease;
+}
+
+.colophon a:hover {
+  border-bottom-color: var(--accent);
+}
+
+.colophon a:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .colophon a {
+    transition: none;
+  }
+}
+
+/* heading for secondary pages, e.g. Site info */
+.page-title {
+  font-family: "Spectral", Georgia, serif;
+  font-size: 1.7rem;
+  font-weight: 400;
+  line-height: 1.25;
+  color: var(--text-main);
+  margin: 0 0 1.8rem;
+}
+
+.hero-lead {
+  font-size: 1.02rem;
+  line-height: 1.7;
+  color: var(--text-main);
+  margin: 0;
+  max-width: 38rem;
+}
+
+.hero-body {
+  font-size: 0.96rem;
+  line-height: 1.75;
+  color: var(--text-main);
+}
+
+/* sections */
+
+.info-section {
+  margin-top: 1.7rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border-soft);
+}
+
+.info-section:first-of-type {
+  margin-top: 0;
+  padding-top: 0;
+  border-top: none;
+}
+
+.info-heading {
+  position: relative;
+  display: inline-block;
+  font-family: "Inter", system-ui, sans-serif;
+  font-size: 0.78rem;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--label);
+  margin: 0 0 0.5rem;
+  padding-bottom: 0.35rem;
+}
+
+.info-heading::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 1.9rem;
+  height: 1px;
+  background: linear-gradient(
+    to right,
+    var(--label),
+    var(--rule-fade)
+  );
+}
+
+.info-section p {
+  margin: 0;
+}
+
+/* space between paragraphs within a section, without adding any before the
+   first one — that gap belongs to the heading */
+.info-section p + p {
+  margin-top: 0.85rem;
+}
+
+/* links inside text */
+
+.info-section a {
+  font-family: "Courier Prime", ui-monospace, "Courier New", monospace;
+  font-size: 1em; /* Courier Prime runs small — no downsizing needed */
+  color: var(--accent);
+  text-decoration: none;
+  border-bottom: 1px solid var(--link-line);
+  transition: border-bottom-color 160ms ease;
+}
+
+.info-section a:hover {
+  border-bottom-color: var(--accent);
+}
+
+.info-section a:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .info-section a {
+    transition: none;
+  }
+}
+
+/* contact list — icon + label */
+
+.contact-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.contact-list a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  /* the rule belongs to the label, not the icon, so it sits under the text only */
+  border-bottom: none;
+}
+
+.contact-list a span {
+  border-bottom: 1px solid var(--link-line);
+  transition: border-bottom-color 160ms ease;
+}
+
+.contact-list a:hover span {
+  border-bottom-color: var(--accent);
+}
+
+.contact-icon {
+  flex: none;
+  width: 0.9375rem;
+  height: 0.9375rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .contact-list a span {
+    transition: none;
+  }
+}
+
+/* 404 */
+
+/* the error page is short, so it sits in the middle rather than at the top */
+.page-centred {
+  align-items: center;
+}
+
+.error-plate {
+  margin: 0 0 2rem;
+}
+
+/* ---- gallery picture light -------------------------------------------
+   A real fixture: a slim bar on a short stem above the canvas, throwing a
+   warm cone downward. Hidden in light mode — the room is already lit. */
+
+/* absolutely positioned so switching themes never shifts the painting */
+.error-plate {
+  position: relative;
+}
+
+.plate-lamp {
+  display: none;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: calc(100% + 0.45rem);
+  width: 34%;
+  max-width: 9rem;
+  height: 0.28rem;
+  border-radius: 0.2rem 0.2rem 0.12rem 0.12rem;
+  /* machined housing: catches light along the top, falls to black underneath */
+  background: linear-gradient(
+    to bottom,
+    #605e57 0%,
+    #4a4842 38%,
+    #2c2b27 76%,
+    #171613 100%
+  );
+  box-shadow:
+    0 -1px 0 rgba(255, 224, 165, 0.2),
+    /* the lit underside — this is the lamp itself, not a reflection */
+      0 1px 0 rgba(255, 219, 155, 0.8),
+    0 2px 7px rgba(255, 206, 120, 0.4),
+    0 5px 14px rgba(0, 0, 0, 0.5);
+}
+
+/* the stem holding it off the wall */
+.plate-lamp::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: 100%;
+  width: 0.18rem;
+  height: 0.62rem;
+  transform: translateX(-50%);
+  background: linear-gradient(to bottom, #2a2926 0%, #4c4a44 70%, #55534c 100%);
+  border-radius: 0.09rem 0.09rem 0 0;
+}
+
+/* the cone in the air between lamp and canvas, widening as it falls */
+.plate-lamp::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: calc(100% - 1px);
+  /* wide enough to spill past the fixture, narrow enough that it can never
+     push the page sideways on a phone */
+  width: 210%;
+  max-width: 100vw;
+  height: 2.2rem;
+  transform: translateX(-50%);
+  pointer-events: none;
+  background: radial-gradient(
+    46% 150% at 50% -8%,
+    rgba(255, 216, 150, 0.36),
+    rgba(255, 216, 150, 0.1) 44%,
+    rgba(255, 216, 150, 0) 76%
+  );
+}
+
+/* the frame exists so the picture light can overlay the canvas only,
+   not the caption beneath it */
+.plate-frame {
+  position: relative;
+  display: block;
+  border-radius: 2px;
+  overflow: hidden;
+  /* hairline keeps the plate from floating free of the page in dark mode */
+  box-shadow: 0 0 0 1px var(--border-soft);
+}
+
+.error-plate img {
+  display: block;
+  width: 100%;
+  height: auto;
+  transition: filter 200ms ease;
+}
+
+/* Picture light. In dark mode the canvas is turned down, then a warm pool is
+   thrown across the top of it and allowed to fall away toward the bottom —
+   the way a gallery lamp actually lights a painting. Light mode gets none of
+   this: the room is already lit. */
+.plate-frame::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 200ms ease;
+  background:
+    /* 1. hot band along the very top, where the lamp is nearest the canvas */
+    linear-gradient(
+      to bottom,
+      rgba(255, 224, 165, 0.52) 0%,
+      rgba(255, 224, 165, 0.24) 14%,
+      rgba(255, 224, 165, 0) 32%
+    ),
+    /* 2. the pool of light, centred under the fixture */
+      radial-gradient(
+        80% 58% at 50% -6%,
+        rgba(255, 219, 155, 0.42),
+        rgba(255, 219, 155, 0.14) 46%,
+        rgba(255, 219, 155, 0) 72%
+      ),
+    /* 3. inverse-square falloff down the canvas */
+      linear-gradient(
+        to bottom,
+        rgba(0, 0, 0, 0) 24%,
+        rgba(0, 0, 0, 0.34) 62%,
+        rgba(0, 0, 0, 0.62) 100%
+      ),
+    /* 4. corners stay out of the beam */
+      radial-gradient(
+        125% 105% at 50% -5%,
+        rgba(0, 0, 0, 0) 52%,
+        rgba(0, 0, 0, 0.46) 100%
+      );
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .error-plate img {
+    filter: brightness(0.62) saturate(0.85);
+  }
+
+  :root:not([data-theme="light"]) .plate-frame::after {
+    opacity: 1;
+  }
+
+  :root:not([data-theme="light"]) .plate-lamp {
+    display: block;
+  }
+}
+
+:root[data-theme="dark"] .error-plate img {
+  filter: brightness(0.62) saturate(0.85);
+}
+
+:root[data-theme="dark"] .plate-frame::after {
+  opacity: 1;
+}
+
+:root[data-theme="dark"] .plate-lamp {
+  display: block;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .plate-frame::after {
+    transition: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .error-plate img {
+    transition: none;
+  }
+}
+
+/* museum-label voice: real Spectral italic, not a synthesised oblique */
+.error-plate figcaption {
+  font-family: "Spectral", Georgia, serif;
+  font-style: italic;
+  font-size: 0.68rem;
+  letter-spacing: 0.01em;
+  line-height: 1.5;
+  color: var(--meta);
+  margin-top: 0.65rem;
+}
+
+.error-code {
+  /* same face as the headline below it */
+  font-family: "Spectral", Georgia, serif;
+  font-size: clamp(4rem, 15vw, 6.5rem);
+  line-height: 1;
+  /* tracking is added to the right edge too, so pull that back to keep the
+     three digits optically centred */
+  letter-spacing: 0.14em;
+  text-indent: 0.14em;
+  text-align: center;
+  color: var(--accent); /* the monogram green */
+  /* room below for the picture light to hang without displacing the painting.
+     Kept in both themes so switching never reflows the page. */
+  margin: 0 0 3.4rem;
+}
+
+.error-title {
+  font-size: 1.5rem;
+  font-weight: 400;
+  line-height: 1.3;
+  color: var(--text-main);
+  margin: 0.6rem 0 0;
+}
+
+.home-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 2rem;
+  font-family: "Courier Prime", ui-monospace, "Courier New", monospace;
+  color: var(--accent);
+  text-decoration: none;
+}
+
+.home-link span {
+  border-bottom: 1px solid var(--link-line);
+  transition: border-bottom-color 160ms ease;
+}
+
+.home-link:hover span {
+  border-bottom-color: var(--accent);
+}
+
+.home-link:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+.home-arrow {
+  flex: none;
+  width: 0.9375rem;
+  height: 0.9375rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .home-link span {
+    transition: none;
+  }
+}
+
+/* footer */
+
+.hero-footer {
+  margin-top: 3rem;
+}
+
+/* info · copyright · theme toggle. The two buttons are the same width, so the
+   copyright lands dead centre without needing to be positioned. */
+.footer-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.footer-years {
+  font-size: 0.7rem;
+  color: var(--meta);
+  letter-spacing: 0.08em;
+  white-space: nowrap;
+}
+
+/* Blind deboss. The letterform is the page colour; all the depth comes from
+   a shadow on its upper edge and a highlight on its lower. It can afford to be
+   decorative now that the copyright line above carries the readable text. */
+.footer-monogram {
+  font-family: "Cormorant Garamond", serif;
+  /* 2.2rem is the floor for this effect: below it the 1px shadows are too
+     large a fraction of Cormorant's stroke and the relief goes flat */
+  font-size: 2.5rem;
+  font-weight: 500;
+  line-height: 1;
+  letter-spacing: 0.04em;
+  text-indent: 0.04em;
+  text-align: center;
+  margin: 1.1rem 0 0;
+  color: var(--emboss-face);
+  text-shadow: 0 -1px 1px var(--emboss-lo), 0 1px 1px var(--emboss-hi);
+  user-select: none;
+}
+
+/* the effect is pure shadow, which forced-colours modes strip away */
+@media (forced-colors: active) {
+  .footer-monogram {
+    color: CanvasText;
+    text-shadow: none;
+  }
+}
