@@ -73,6 +73,9 @@
 html {
   font-size: 112.5%;
   -webkit-text-size-adjust: 100%;
+  /* reserve the scrollbar's width on every page so short pages (Site info)
+     don't jump sideways relative to tall ones (home) when navigating */
+  scrollbar-gutter: stable;
 }
 
 body {
