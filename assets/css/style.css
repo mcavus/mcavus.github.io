@@ -272,9 +272,20 @@ body {
   margin: 0;
 }
 
+.hero-location {
+  font-size: 0.9rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--meta);
+  /* bottom spacing now belongs to .identity */
+  margin: 0.35rem 0 0;
+}
+
 /* At phone widths the enlarged name would wrap to "MARK / CAVUSOGLU".
    Tightening tracking and easing the size keeps it on one line without
-   changing anything above 400px. */
+   changing anything above 400px. Must sit after the base .hero-name and
+   .hero-location rules: a media query adds no specificity, so at equal
+   specificity whichever rule comes last in the file wins. */
 @media (max-width: 25rem) {
   .hero-name {
     font-size: 1.12rem;
@@ -289,15 +300,6 @@ body {
     width: 4rem;
     height: 4rem;
   }
-}
-
-.hero-location {
-  font-size: 0.9rem;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--meta);
-  /* bottom spacing now belongs to .identity */
-  margin: 0.35rem 0 0;
 }
 
 /* back-link above the title on secondary pages */
