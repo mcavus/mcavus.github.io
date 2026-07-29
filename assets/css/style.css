@@ -236,8 +236,8 @@ body {
 .avatar {
   flex: none;
   display: block;
-  width: 3.25rem;
-  height: 3.25rem;
+  width: 4.5rem;
+  height: 4.5rem;
   border-radius: 50%;
   overflow: hidden;
   /* hairline ring keeps the circle from dissolving into the page in both themes */
@@ -264,7 +264,7 @@ body {
 
 .hero-name {
   letter-spacing: 0.14em;
-  font-size: 1.05rem;
+  font-size: 1.3rem;
   font-weight: 500;
   line-height: 1.2;
   color: var(--accent);
@@ -272,8 +272,27 @@ body {
   margin: 0;
 }
 
+/* At phone widths the enlarged name would wrap to "MARK / CAVUSOGLU".
+   Tightening tracking and easing the size keeps it on one line without
+   changing anything above 400px. */
+@media (max-width: 25rem) {
+  .hero-name {
+    font-size: 1.12rem;
+    letter-spacing: 0.07em;
+  }
+
+  .hero-location {
+    font-size: 0.82rem;
+  }
+
+  .avatar {
+    width: 4rem;
+    height: 4rem;
+  }
+}
+
 .hero-location {
-  font-size: 0.78rem;
+  font-size: 0.9rem;
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--meta);
