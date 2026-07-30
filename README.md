@@ -4,6 +4,10 @@ My personal site. Live at **[mcavus.com](https://mcavus.com)**.
 
 Plain HTML, CSS and a little vanilla JavaScript, hosted on GitHub Pages.
 
+My blog lives at **[blog.mcavus.com](https://blog.mcavus.com)**
+([source](https://github.com/mcavus/blog.mcavus.com)), built with
+[Overprint](https://overprint.mcavus.com/).
+
 ## Structure
 
 ```
