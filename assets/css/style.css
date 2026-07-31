@@ -355,7 +355,6 @@ body {
 }
 
 .colophon a {
-  font-family: "Courier Prime", ui-monospace, "Courier New", monospace;
   color: var(--accent);
   text-decoration: none;
   border-bottom: 1px solid var(--link-line);
@@ -455,9 +454,9 @@ body {
 
 /* links inside text */
 
+/* Links in prose keep the paragraph face; only the colour and the rule mark them. The mono
+   face is reserved for .url, where the link text is the address itself. */
 .info-section a {
-  font-family: "Courier Prime", ui-monospace, "Courier New", monospace;
-  font-size: 1em; /* Courier Prime runs small — no downsizing needed */
   color: var(--accent);
   text-decoration: none;
   border-bottom: 1px solid var(--link-line);
@@ -478,6 +477,12 @@ body {
   .info-section a {
     transition: none;
   }
+}
+
+/* Link text that is a literal address — a domain, a path, an email. Sets the face only; the
+   colour and rule come from whichever link rule already applies. */
+.url {
+  font-family: "Courier Prime", ui-monospace, "Courier New", monospace;
 }
 
 /* contact list — icon + label */
