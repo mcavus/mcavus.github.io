@@ -4,8 +4,8 @@ My personal site. Live at **[mcavus.com](https://mcavus.com)**.
 
 Plain HTML, CSS and a little vanilla JavaScript, hosted on GitHub Pages.
 
-My blog lives at **[blog.mcavus.com](https://blog.mcavus.com)**
-([source](https://github.com/mcavus/blog.mcavus.com)), built with
+My blog lives at **[mcavus.com/blog](https://mcavus.com/blog)**
+([source](https://github.com/mcavus/blog)), built with
 [Overprint](https://overprint.mcavus.com/).
 
 ## Structure
